@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    .menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        transition: opacity .6s, visibility .5s,transform .3s ease;
+        .title {
+            font-weight: 700;
+            font-size: 25px;
+        }
+    .trainers {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        .trainer {
+            border: solid 8px black;
+            border-radius: 18px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            .title {
+                text-align: center;
+                font-size: 22px;
+            }
+            img {
+                max-width: 175px;
+            }
+        }
+    }
+}
+.animation_start {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-20%);
+}
+.animation_end {
+    visibility: visible;
+    opacity:1;
+    transform: translateY(0);
+}
+}
