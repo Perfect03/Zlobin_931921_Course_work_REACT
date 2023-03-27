@@ -1,4 +1,9 @@
+import { TrainerType } from '../../interfaces&types/types';
 import styles from './Table.module.scss';
+
+interface IProps {
+  type: TrainerType
+}
 
 const Table = () => {
   return (<div className={styles.container}>

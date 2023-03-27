@@ -4,19 +4,24 @@ import { Route, Routes } from 'react-router-dom';
 import styles from './App.module.scss';
 import Carno from '../components/Carno/Carno';
 import Table from '../components/Table/Table';
-import Select from '../components/Select/Select';
+import SelectTrainerType from '../components/SelectTrainerType/SelectTrainerType';
+import SelectVarsCount from '../components/SelectVarsCount/SelectVarsCount';
 
 function App() {
   return (
     <>
         <Routes>
             <Route index element={<Main />} />
-            <Route path="/carno/random" element={<Carno />} />
-            <Route path="/carno/fromTeacher" element={<Carno />} />
-            <Route path="/carno" element={<Select what={"карты Карно"} />} />
-            <Route path="/table/random" element={<Table />} />
-            <Route path="/table/fromTeacher" element={<Table />} />
-            <Route path="/table" element={<Select what={"таблицы"} />} />
+            <Route path="/carno/random/:id" element={<Carno />} />
+            <Route path="/carno/random" element={<SelectVarsCount />} />
+            <Route path="/carno/fromTeacher/:id" element={<Carno />} />
+            <Route path="/carno/fromTeacher" element={<SelectVarsCount />} />
+            <Route path="/carno" element={<SelectTrainerType what={"карты Карно"} />} />
+            <Route path="/table/random/:id" element={<Table />} />
+            <Route path="/table/random" element={<SelectVarsCount />} />
+            <Route path="/table/fromTeacher/:id" element={<Table />} />
+            <Route path="/table/fromTeacher" element={<SelectVarsCount />} />
+            <Route path="/table" element={<SelectTrainerType what={"таблицы"} />} />
         </Routes>
     </>
   );

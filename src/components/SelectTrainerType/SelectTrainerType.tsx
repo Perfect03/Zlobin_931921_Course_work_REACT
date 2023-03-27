@@ -1,5 +1,5 @@
-import styles from './Select.module.scss';
-import { NavLink } from 'react-router-dom';
+import styles from './SelectTrainerType.module.scss';
+import { Link, NavLink } from 'react-router-dom';
 import Carno from '../../assets/Carno.png';
 import Table from '../../assets/Table.png';
 import { useEffect, useState } from 'react';
@@ -8,7 +8,7 @@ interface IProps {
   what: string
 }
 
-const Select = ({what}: IProps) => {
+const SelectTrainerType = ({what}: IProps) => {
   const [animation, setAnimation] = useState(false);
   useEffect(() => {
     console.log(what);
@@ -19,8 +19,8 @@ const Select = ({what}: IProps) => {
     <div className={`${styles.menu} ${animation ? styles.animation_end : styles.animation_start}`}>
     <div className={styles.title}>Выберите способ построения {what}:</div>
     <ol>
-      <li><span>по автоматически генерируемым функциям</span></li>
-      <li><span>по заранее построенным (преподавателем) функциям</span></li>
+    <Link to="random"><li><span>по автоматически генерируемым функциям</span></li></Link>
+    <Link to="fromTeacher"><li><span>по заранее построенным (преподавателем) функциям</span></li></Link>
     </ol>
     </div>
   </div>
@@ -32,4 +32,4 @@ const Select = ({what}: IProps) => {
   );
 };
 
-export default Select;
+export default SelectTrainerType;
