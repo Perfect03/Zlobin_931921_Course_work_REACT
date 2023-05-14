@@ -1,1 +1,1 @@
-export type TrainerType = "auto" | "static";
+export type TrainerType = 'auto' | 'static';

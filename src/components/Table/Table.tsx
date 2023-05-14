@@ -2,13 +2,12 @@ import { TrainerType } from '../../interfaces&types/types';
 import styles from './Table.module.scss';
 
 interface IProps {
-  type: TrainerType
+  type: TrainerType;
 }
 
-const Table = () => {
-  return (<div className={styles.container}>
-    
-  </div>
+const Table = ({ type }: IProps) => {
+  return (
+    <div className={styles.container}></div>
     /*<Context.Provider value={{ persons: data }}>
       <BrowserRouter>
         
