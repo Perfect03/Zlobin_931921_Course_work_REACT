@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
     background-color: 0x80000000;
     .menu {
         display: flex;
@@ -34,7 +34,7 @@
                 }
                 span:hover:after, &:focus:after, &.activeItem:after  {
                     width: 100%;
-                }
+                } 
             }
         }
         .title {

@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import Carno from '../../assets/Carno.png';
 import Table from '../../assets/Table.png';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   what: string;
@@ -10,6 +11,7 @@ interface IProps {
 
 const SelectTrainerType = ({ what }: IProps) => {
   const [animation, setAnimation] = useState(false);
+  const { t } = useTranslation();
   useEffect(() => {
     console.log(what);
     setAnimation(true);
@@ -19,16 +21,16 @@ const SelectTrainerType = ({ what }: IProps) => {
       <div
         className={`${styles.menu} ${animation ? styles.animation_end : styles.animation_start}`}
       >
-        <div className={styles.title}>Выберите способ построения {what}:</div>
+        <div className={styles.title}>{t('Select way to build: ')}</div>
         <ol>
           <Link to="random">
             <li>
-              <span>по автоматически генерируемым функциям</span>
+              <span>{t('by automatically generated functions')}</span>
             </li>
           </Link>
           <Link to="fromTeacher">
             <li>
-              <span>по заранее построенным (преподавателем) функциям</span>
+              <span>{t('by functions pre-build by the teacher')}</span>
             </li>
           </Link>
         </ol>

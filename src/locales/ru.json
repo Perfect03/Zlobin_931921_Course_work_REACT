@@ -1,0 +1,14 @@
+{
+  "Karnaugh map building": "Построение карты Карно",
+  "Number of variables": "Количество переменных",
+  "Done": "Готово",
+  "Next": "Далее",
+  "Result": "Результат",
+  "Select way to build: ": "Выберите способ построения: ",
+  "by automatically generated functions": "по автоматически генерируемым функциям",
+  "by functions pre-build by the teacher": "по заранее построенным (преподавателем) функциям",
+  "Choose trainer": "Выберите тренажёр",
+  "Karnaugh map": "Карта Карно",
+  "Truth table": "Таблица истинности",
+  "Zhegalkin polynomial": "Полином Жегалкина"
+}

@@ -2,17 +2,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
     .menu {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 20px;
+        font-weight: 700;
+        font-size: 25px;
         transition: opacity .6s, visibility .5s,transform .3s ease;
-        .title {
-            font-weight: 700;
-            font-size: 25px;
-        }
     .trainers {
         display: flex;
         flex-wrap: wrap;
@@ -27,6 +25,7 @@
             .title {
                 text-align: center;
                 font-size: 22px;
+                max-width: 175px;
             }
             img {
                 max-width: 175px;

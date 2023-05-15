@@ -1,0 +1,55 @@
+header {
+    display: flex;
+    height: 80px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15.833vw;
+    top: -80px;
+    align-items: center;
+    transition: .35s cubic-bezier(0.645, 0.045, 0.355, 1);
+    .left {
+        display: flex;
+        align-items: center;
+        .back {
+            margin-right: 40px;
+            cursor: pointer;
+            padding: 3px;
+            border-radius: 100%;
+            box-shadow: 0px 0px 0px 3px transparent;
+            transition: all cubic-bezier(0.215, 0.610, 0.355, 1) 0.2s;
+            &:hover {
+                box-shadow: 0px 0px 0px 3px rgba(0,0,0,0.4);
+            }
+        }
+        .title {
+            font-weight: 600;
+            font-size: 25px;
+            line-height: 22px;
+        }
+    }
+    .langs {
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 18px;
+        border: 3px solid black;
+        padding: 4px 0;
+        .lang {
+            color: black;
+            cursor: pointer;
+            padding: 0 4px;
+            &:hover {
+                color: #0072bc;
+            }
+            &.active {
+                color: #0072bc;
+            }
+            &:first-child {
+                border-right: 3px solid black;
+            }
+        }
+    }
+}
+
+.toastify {
+    top: 77px;
+}

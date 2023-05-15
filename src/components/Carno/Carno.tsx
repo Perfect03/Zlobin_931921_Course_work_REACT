@@ -1,48 +1,33 @@
 import { useParams } from 'react-router-dom';
 import getRandomArbitrary from '../../helpers/getRandomArbitrary';
-import { TrainerType } from '../../interfaces&types/types';
+import { TrainerType } from '../../interfaces&types&consts/types';
 import styles from './Carno.module.scss';
 import { useEffect, useState } from 'react';
-
-const answers = {
-  fn2__1: '1111',
-  fn2__2: '0010',
-  fn2__3: '1111',
-  fn2__4: '0011',
-  fn2__5: '1001',
-  fn2__6: '1001',
-
-  fn3__1: '11111010',
-  fn3__2: '00101111',
-  fn3__3: '11111111',
-  fn3__4: '00000010',
-  fn3__5: '00111110',
-  fn3__6: '00101010',
-
-  fn4__1: '0000100011000000',
-  fn4__2: '1111111111111111',
-  fn4__3: '1100111011011101',
-  fn4__4: '0000111111111111',
-  fn4__5: '0000000011001100',
-  fn4__6: '0000111011101111',
-
-  fn5__1: '00100100001011000000010000100100',
-  fn5__2: '10011001100111011001100110011001',
-  fn5__3: '00100011000000110000001100000011',
-  fn5__4: '00000110000001110000011000000110',
-  fn5__5: '00000000000000000000000000000000',
-  fn5__6: '01100000011111000110000001100000',
-};
+import { X, operators, answers } from '../../interfaces&types&consts/consts';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   type: TrainerType;
 }
+
+function generateFunction(n: number) {
+  const f = '';
+  const v = [];
+  let p = 1; // вероятность генерации ещё одного выражения
+  while (Math.random() < p) {
+    p /= 2;
+    v.push(generateVar(p));
+  }
+}
+
+function generateVar(p: number) {}
 
 const Carno = ({ type }: IProps) => {
   const [vars, setVars] = useState(Number(localStorage.getItem('varsCount')) || 2);
   const [fn, setFn] = useState(getRandomArbitrary(1, 6));
   const [result, setResult] = useState(-1);
   const [progress, setProgress] = useState([] as number[]);
+  const { t } = useTranslation();
 
   const tableFillingInit = [];
   for (let i = 0; i < Math.pow(2, vars); i++) tableFillingInit.push(0);
@@ -87,7 +72,7 @@ const Carno = ({ type }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.vars}>
-        <div className={styles.title}>Количество переменных:</div>
+        <div className={styles.title}>{t('Number of variables')}</div>
         <div className={styles.bar}>
           <div
             className={`${styles.var} ${vars == 2 ? styles.active : ''}`}
@@ -156,7 +141,6 @@ const Carno = ({ type }: IProps) => {
                   onClick={() => {
                     const newTable = tableFilling;
                     newTable[index] = 1 - tableFilling[index];
-                    console.log(newTable[index]);
                     setTableFilling([...newTable]);
                   }}
                 >
@@ -190,10 +174,10 @@ const Carno = ({ type }: IProps) => {
         </div>
         <div className={styles.buttons}>
           <button className={styles.enter} onClick={() => checkAnswer()}>
-            {result >= 0 ? 'Далее' : 'Готово'}
+            {t(result >= 0 ? 'Next' : 'Done')}
           </button>
           <div className={`${styles.result} ${result >= 0 ? styles.active : ''}`}>
-            {result >= 0 ? `Результат: ${result}%` : ''}
+            {result >= 0 ? `${t('Result')}: ${result}%` : ''}
           </div>
         </div>
       </div>

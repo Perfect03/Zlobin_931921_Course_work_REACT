@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { TrainerType } from '../interfaces&types/types';
+import { TrainerType } from '../interfaces&types&consts/types';
 
 class Counter {
   trainerType = 'auto';
