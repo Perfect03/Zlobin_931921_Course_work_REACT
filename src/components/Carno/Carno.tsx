@@ -47,12 +47,14 @@ const Carno = ({ type }: IProps) => {
   //console.log(CheckTreeAnswer(tree._root, tableFilling, vars));
 
   useEffect(() => {
-    const fn: (XNode | string)[] = [];
-    //setTree(new Tree(operators[Math.floor(Math.random() * operators.length)]));
-    generateWithTree(tree._root, 1, vars);
-    PrintFunction(tree._root, fn);
-    setFn(fn);
-    console.log(tree, fn, fn.slice(1, fn.length - 1));
+    if (type === 'auto') {
+      const fn: (XNode | string)[] = [];
+      //setTree(new Tree(operators[Math.floor(Math.random() * operators.length)]));
+      generateWithTree(tree._root, 1, vars);
+      PrintFunction(tree._root, fn);
+      setFn(fn);
+      console.log(tree, fn, fn.slice(1, fn.length - 1));
+    }
   }, [tree]);
 
   const tableFillingInit = [];
