@@ -1,16 +1,8 @@
 import { operators, CarnoValuesOrder } from '../interfaces&types&consts/consts';
-import { Tree, Node } from './tree';
+import { XNode } from '../interfaces&types&consts/types';
+import { Node } from './tree';
 
-export class Variable {
-  constructor(index, bool) {
-    this.index = index;
-    this.bool = bool;
-    this.left = null;
-    this.right = null;
-  }
-}
-
-export function Generate(v, vars) {
+/*export function Generate(v, vars) {
   const probabilities = [];
   for (let i = 0, p = 1 / 2; i < vars; i++, p /= 2) {
     probabilities.push(p);
@@ -89,41 +81,13 @@ function fillArray(a, vars) {
   // console.log(a);
 }
 
-function formConunction(i, vars) {
-  const conunction = [];
-  for (let j = 0; j < i; j++) {
-    const a = Math.random();
-    const b = Math.random() >= 1 / 2;
-    let k = 1;
-    //console.log(a, k, vars);
-    while (a > k / vars) k++;
-    conunction.some((el) => el.index === k)
-      ? j--
-      : conunction.push({
-          index: k,
-          bool: b,
-        });
-  }
-  conunction.sort(function (a, b) {
-    return a.index - b.index;
-  });
-  return conunction;
-}
-
 function Operators(a) {
   a.forEach((el, index) => {
     //if(el.isArray() )
   });
 }
-
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-export function generateWithTree(node, depth, vars) {
+*/
+export function generateWithTree(node: Node, depth: number, vars: number) {
   //tree.add('VP of Happiness', 'CEO', tree.traverseDF);
 
   //if(operators.includes(node.data)) {
@@ -148,93 +112,105 @@ export function generateWithTree(node, depth, vars) {
     node.right = newRight;
     newRight.parent = node;
   }
-  //}
-
-  //   let r = Math.random();
-  // console.log(r);
-  // if (r < 1/Math.pow(2, depth)) {
-  //   console.log(depth);
-
-  //   const temp = [];
-  //   const temp2 = [];
-  //   generateVar(depth+1, temp, vars);
-  //   generateVar(depth+1, temp2, vars);
-  //   v.push(temp);
-  //   v.push(temp2);
-  // }
-  // else {
-  //   r = Math.random();
-  //   for (let i=0; i/vars<=r; i++) {
-  //     v.push([]);
-  //   }
-  // }
 }
 
-export function PrintFunction(node, f) {
+function formConunction(i: number, vars: number) {
+  const conunction: XNode[] = [];
+  for (let j = 0; j < i; j++) {
+    const a = Math.random();
+    const b = Math.random() >= 1 / 2;
+    let k = 1;
+    while (a > k / vars) k++;
+    conunction.some((el) => el.index === k)
+      ? j--
+      : conunction.push({
+          index: k,
+          bool: b,
+        });
+  }
+  conunction.sort(function (a, b) {
+    return a.index - b.index;
+  });
+  return conunction;
+}
+
+export function PrintFunction(node: Node, f: Array<string | XNode>) {
   f.push('(');
-  Array.isArray(node.left.data) ? f.push(...node.left.data) : PrintFunction(node.left, f);
-  f.push(node.data);
-  Array.isArray(node.right.data) ? f.push(...node.right.data) : PrintFunction(node.right, f);
+  node.left && Array.isArray(node.left.data)
+    ? f.push(...node.left.data)
+    : PrintFunction(node.left as Node, f);
+  f.push(node.data as string);
+  node.right && Array.isArray(node.right.data)
+    ? f.push(...node.right.data)
+    : PrintFunction(node.right as Node, f);
   f.push(')');
 }
 
-export function CheckTreeAnswer(root, a, vars) {
+export function CheckTreeAnswer(root: Node, a: number[], vars: number) {
   let count = 0;
-  for (let i=0; i<a.length; i++) {
+  const progress = [];
+  for (let i = 0; i < a.length; i++) {
     const vector = CarnoValuesOrder[vars][i];
     console.log(vector);
     const t = getValue(root, vector);
     console.log(t, a[i]);
-    if(t == a[i]) count++;
+    if (t == a[i]) {
+      count++;
+      progress[i] = 1;
+    } else progress[i] = 0;
     console.log(count);
   }
-  return count;
+  return {
+    count: count,
+    progress: progress,
+  };
 }
 
-function getValue(node, vector) {
+function getValue(node: Node, vector: string) {
   let left, right;
   console.log(node);
-  if (Array.isArray(node.left.data)) {
+  if (node.left && Array.isArray(node.left.data)) {
     left = 1;
-    node.left.data.forEach(el => {
-      if(Number(el.bool) != vector[el.index-1]) left = 0;
-    })
-  }
-  else left = getValue(node.left, vector);
-  if (Array.isArray(node.right.data)) {
+    node.left.data.forEach((el) => {
+      console.log(Number(el.bool), Number(vector[el.index - 1]));
+      if (Number(el.bool) != Number(vector[el.index - 1])) left = 0;
+    });
+  } else left = getValue(node.left as Node, vector);
+  if (node.right && Array.isArray(node.right.data)) {
     right = 1;
-    node.right.data.forEach(el => {
-      if(Number(el.bool) != vector[el.index+1]) right = 0;
-    })
-  }
-  else right = getValue(node.right, vector);
+    node.right.data.forEach((el) => {
+      console.log(Number(el.bool), Number(vector[el.index - 1]));
+      if (Number(el.bool) != Number(vector[el.index - 1])) right = 0;
+    });
+  } else right = getValue(node.right as Node, vector);
   let answ = 0;
+  console.log(left, right);
   switch (node.data) {
     case '⊕':
       answ = left ^ right;
+      break;
     case '∨':
       answ = left || right;
+      break;
     case '∧':
       answ = left && right;
+      break;
     case '~':
-      answ = left == right;
+      answ = Number(left == right);
+      break;
     case '←':
-      answ = !(!left && right);
-    case '∕':
-      answ = !left || !right;
+      answ = Number(!(!left && right));
+      break;
+    case '/':
+      answ = Number(!left || !right);
+      break;
     case '→':
-      answ = !(left && !right);
+      answ = Number(!(left && !right));
+      break;
     case '↓':
-      answ = !left && !right;
+      answ = Number(!left && !right);
+      break;
   }
+  console.log(answ);
   return answ;
-}
-
-function arrMergeRecursive(arr) {
-  let temp = [];
-  for (let i = 0; i < arr.length; i++) {
-    const item = arr[i];
-    item.isArray() ? (temp = temp.concat(arrMergeRecursive(item))) : temp.push(item);
-  }
-  return temp;
 }

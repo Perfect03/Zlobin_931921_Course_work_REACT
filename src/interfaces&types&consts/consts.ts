@@ -1,4 +1,6 @@
-export const operators = ['⊕', '∨', '∧', '~', '←', '∕', '→', '↓'];
+import { Operator } from './types';
+
+export const operators: Operator[] = ['⊕', '∨', '∧', '~', '←', '/', '→', '↓'];
 export const X = ['x₁', 'x₂', 'x₃', 'x₄', 'x₅'];
 export const answers = {
   fn2__1: '1111',

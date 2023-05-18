@@ -1,16 +1,11 @@
 import { useParams } from 'react-router-dom';
 import getRandomArbitrary from '../../helpers/getRandomArbitrary';
-import { TrainerType, XNode } from '../../interfaces&types&consts/types';
+import { TrainerType, XNode, Result } from '../../interfaces&types&consts/types';
 import styles from './Carno.module.scss';
 import { useEffect, useState } from 'react';
 import { X, operators, answers } from '../../interfaces&types&consts/consts';
 import { useTranslation } from 'react-i18next';
-import {
-  CheckTreeAnswer,
-  Generate,
-  PrintFunction,
-  generateWithTree,
-} from '../../helpers/generateFunctions';
+import { CheckTreeAnswer, PrintFunction, generateWithTree } from '../../helpers/generateFunctions';
 import { Tree, Node } from '../../helpers/tree';
 import { spawn } from 'child_process';
 
@@ -28,23 +23,37 @@ interface IProps {
 
 const Carno = ({ type }: IProps) => {
   const [vars, setVars] = useState(Number(localStorage.getItem('varsCount')) || 2);
-  const [fn, setFn] = useState(getRandomArbitrary(1, 6));
+  const [tree, setTree] = useState(
+    new Tree(operators[Math.floor(Math.random() * operators.length)])
+  );
+  const [fn, setFn] = useState(
+    type === 'static' ? getRandomArbitrary(1, 6) : ([] as (XNode | string)[])
+  );
+  //const [tree, setTree] = useState();
+  //const [randFn, setRandFn] = useState([] as (XNode | string)[]);
   const [result, setResult] = useState(-1);
   const [progress, setProgress] = useState([] as number[]);
   const { t } = useTranslation();
 
-  const f: (XNode | string)[] = [];
-  const w: string[] = [];
+  //const w: string[] = [];
   //Generate(w, vars);
-  console.log(w);
-
-  const tree = new Tree(operators[Math.floor(Math.random() * operators.length)]);
-  generateWithTree(tree._root, 1, vars);
-  console.log(tree);
-  console.log(vars);
-  PrintFunction(tree._root, f);
-  console.log(f.splice(1, f.length - 1));
+  //console.log(w);
+  //let f: (XNode | string)[] = [];
+  //const tree = new Tree(operators[Math.floor(Math.random() * operators.length)]);
+  //generateWithTree(tree._root, 1, vars);
+  //console.log(tree);
+  //console.log(vars);
+  //console.log(f.splice(1, f.length - 1));
   //console.log(CheckTreeAnswer(tree._root, tableFilling, vars));
+
+  useEffect(() => {
+    const fn: (XNode | string)[] = [];
+    //setTree(new Tree(operators[Math.floor(Math.random() * operators.length)]));
+    generateWithTree(tree._root, 1, vars);
+    PrintFunction(tree._root, fn);
+    setFn(fn);
+    console.log(tree, fn, fn.slice(1, fn.length - 1));
+  }, [tree]);
 
   const tableFillingInit = [];
   for (let i = 0; i < Math.pow(2, vars); i++) tableFillingInit.push(0);
@@ -57,6 +66,7 @@ const Carno = ({ type }: IProps) => {
     const newTableFilling = [];
     for (let i = 0; i < Math.pow(2, n); i++) newTableFilling.push(0);
     setTableFilling(newTableFilling);
+    if (type === 'auto') setTree(new Tree(operators[Math.floor(Math.random() * operators.length)]));
   }
 
   function checkAnswer() {
@@ -68,23 +78,32 @@ const Carno = ({ type }: IProps) => {
       setTableFilling(newTableFilling);
       setResult(-1);
       setProgress([]);
-      let newFn = getRandomArbitrary(1, 6);
-      while (fn == newFn) newFn = getRandomArbitrary(1, 6);
-      setFn(newFn);
+      if (type === 'auto')
+        setTree(new Tree(operators[Math.floor(Math.random() * operators.length)]));
+      else {
+        let newFn = getRandomArbitrary(1, 6);
+        while (fn == newFn) newFn = getRandomArbitrary(1, 6);
+        setFn(newFn);
+      }
     } else {
-      CheckTreeAnswer(tree._root, tableFilling, vars);
-      const answKey = Object.keys(answers).findIndex((el) => el == `fn${vars}__${fn}`);
-      const answValue = Object.values(answers)[answKey];
       let count = 0;
-      const progress = [];
-      for (let i = 0; i < answValue.length; i++)
-        if (Number(answValue[i]) == tableFilling[i]) {
-          count++;
-          progress[i] = 1;
-        } else progress[i] = 0;
-      count = CheckTreeAnswer(tree._root, tableFilling, vars);
-      setResult(Math.floor((count / answValue.length) * 100));
-      setProgress(progress);
+      let progress = [];
+      if (type == 'static') {
+        const answKey = Object.keys(answers).findIndex((el) => el == `fn${vars}__${fn}`);
+        const answValue = Object.values(answers)[answKey];
+        for (let i = 0; i < answValue.length; i++)
+          if (Number(answValue[i]) == tableFilling[i]) {
+            count++;
+            progress[i] = 1;
+          } else progress[i] = 0;
+      } else {
+        const check = CheckTreeAnswer(tree._root, tableFilling, vars);
+        count = check.count;
+        progress = check.progress;
+        console.log(count, progress);
+        setResult(Math.floor((count / tableFilling.length) * 100));
+        setProgress(progress);
+      }
     }
   }
 
@@ -118,14 +137,28 @@ const Carno = ({ type }: IProps) => {
             5
           </div>
         </div>
-        <div>{f.splice(1, f.length - 1).map((el, index) => (typeof el == 'string' ? <span key={index}>{el}</span> : 
-        <span key={index} style={{textDecoration: `${el.bool ? '' : 'overline'}`}}>{X[el.index-1]}</span>))}</div>
       </div>
-      <img
-        className={styles.function}
-        src={require(`../../assets/functions/${vars}/${fn}.png`)}
-        alt=""
-      />
+      {type === 'auto' ? (
+        <div className={styles.functionRandom}>
+          {(fn as (string | XNode)[])
+            .slice(1, (fn as (string | XNode)[]).length - 1)
+            .map((el, index) =>
+              typeof el == 'string' ? (
+                <span key={index}>{el}</span>
+              ) : (
+                <span key={index} style={{ textDecoration: `${el.bool ? '' : 'overline'}` }}>
+                  {X[el.index - 1]}
+                </span>
+              )
+            )}
+        </div>
+      ) : (
+        <img
+          className={styles.functionImage}
+          src={require(`../../assets/functions/${vars}/${fn}.png`)}
+          alt=""
+        />
+      )}
       <div className={styles.left_flex}>
         <div className={styles.table_container}>
           <div className={styles.table_grid}>
