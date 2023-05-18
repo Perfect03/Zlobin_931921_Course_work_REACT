@@ -1,26 +1,30 @@
 import { useParams } from 'react-router-dom';
 import getRandomArbitrary from '../../helpers/getRandomArbitrary';
-import { TrainerType } from '../../interfaces&types&consts/types';
+import { TrainerType, XNode } from '../../interfaces&types&consts/types';
 import styles from './Carno.module.scss';
 import { useEffect, useState } from 'react';
 import { X, operators, answers } from '../../interfaces&types&consts/consts';
 import { useTranslation } from 'react-i18next';
+import {
+  CheckTreeAnswer,
+  Generate,
+  PrintFunction,
+  generateWithTree,
+} from '../../helpers/generateFunctions';
+import { Tree, Node } from '../../helpers/tree';
+import { spawn } from 'child_process';
 
 interface IProps {
   type: TrainerType;
 }
 
-function generateFunction(n: number) {
-  const f = '';
-  const v = [];
-  let p = 1; // вероятность генерации ещё одного выражения
-  while (Math.random() < p) {
-    p /= 2;
-    v.push(generateVar(p));
-  }
-}
-
-function generateVar(p: number) {}
+// function generateFunction(n: number) {
+//   let p = 1; // вероятность генерации ещё одного выражения
+//   while (Math.random() < p) {
+//     p /= 2;
+//     v.push(generateVar(p));
+//   }
+// }
 
 const Carno = ({ type }: IProps) => {
   const [vars, setVars] = useState(Number(localStorage.getItem('varsCount')) || 2);
@@ -28,6 +32,19 @@ const Carno = ({ type }: IProps) => {
   const [result, setResult] = useState(-1);
   const [progress, setProgress] = useState([] as number[]);
   const { t } = useTranslation();
+
+  const f: (XNode | string)[] = [];
+  const w: string[] = [];
+  //Generate(w, vars);
+  console.log(w);
+
+  const tree = new Tree(operators[Math.floor(Math.random() * operators.length)]);
+  generateWithTree(tree._root, 1, vars);
+  console.log(tree);
+  console.log(vars);
+  PrintFunction(tree._root, f);
+  console.log(f.splice(1, f.length - 1));
+  //console.log(CheckTreeAnswer(tree._root, tableFilling, vars));
 
   const tableFillingInit = [];
   for (let i = 0; i < Math.pow(2, vars); i++) tableFillingInit.push(0);
@@ -55,6 +72,7 @@ const Carno = ({ type }: IProps) => {
       while (fn == newFn) newFn = getRandomArbitrary(1, 6);
       setFn(newFn);
     } else {
+      CheckTreeAnswer(tree._root, tableFilling, vars);
       const answKey = Object.keys(answers).findIndex((el) => el == `fn${vars}__${fn}`);
       const answValue = Object.values(answers)[answKey];
       let count = 0;
@@ -64,6 +82,7 @@ const Carno = ({ type }: IProps) => {
           count++;
           progress[i] = 1;
         } else progress[i] = 0;
+      count = CheckTreeAnswer(tree._root, tableFilling, vars);
       setResult(Math.floor((count / answValue.length) * 100));
       setProgress(progress);
     }
@@ -99,6 +118,8 @@ const Carno = ({ type }: IProps) => {
             5
           </div>
         </div>
+        <div>{f.splice(1, f.length - 1).map((el, index) => (typeof el == 'string' ? <span key={index}>{el}</span> : 
+        <span key={index} style={{textDecoration: `${el.bool ? '' : 'overline'}`}}>{X[el.index-1]}</span>))}</div>
       </div>
       <img
         className={styles.function}

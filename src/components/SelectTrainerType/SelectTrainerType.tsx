@@ -2,6 +2,7 @@ import styles from './SelectTrainerType.module.scss';
 import { Link, NavLink } from 'react-router-dom';
 import Carno from '../../assets/Carno.png';
 import Table from '../../assets/Table.png';
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

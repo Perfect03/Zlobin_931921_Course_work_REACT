@@ -2,6 +2,7 @@ import styles from './Main.module.scss';
 import { Link } from 'react-router-dom';
 import Carno from '../../assets/Carno.png';
 import Table from '../../assets/Table.png';
+import Zhegalkin from '../../assets/Zhegalkin.png';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,7 +29,7 @@ const Main = () => {
           </Link>
           <Link className={styles.trainer} to="zhegalkin">
             <div className={styles.title}>{t('Zhegalkin polynomial')}</div>
-            <img src={Carno} alt="Полином Жегалкина" />
+            <img src={Zhegalkin} alt="Полином Жегалкина" />
           </Link>
         </div>
       </div>
