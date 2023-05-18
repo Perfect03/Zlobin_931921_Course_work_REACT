@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.f3a727ae.css",
-    "main.js": "/static/js/main.64f250d5.js",
-    "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
-    "static/media/Rubik-Regular.ttf": "/static/media/Rubik-Regular.f887c9f4ac165f5e1912.ttf",
-    "static/media/Carno.png": "/static/media/Carno.d86cd194a4fdf98fa952.png",
-    "static/media/3.png": "/static/media/3.1f3c53f9d665b9096ad0.png",
-    "index.html": "/index.html",
-    "static/media/back.svg": "/static/media/back.d1b57575113f0971fe88292b6dea3821.svg",
-    "main.f3a727ae.css.map": "/static/css/main.f3a727ae.css.map",
-    "main.64f250d5.js.map": "/static/js/main.64f250d5.js.map",
-    "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
+    "main.css": "./static/css/main.970fda4d.css",
+    "main.js": "./static/js/main.abd6ac2e.js",
+    "static/js/787.28cb0dcd.chunk.js": "./static/js/787.28cb0dcd.chunk.js",
+    "static/media/Rubik-Regular.ttf": "./static/media/Rubik-Regular.f887c9f4ac165f5e1912.ttf",
+    "static/media/Carno.png": "./static/media/Carno.d86cd194a4fdf98fa952.png",
+    "static/media/3.png": "./static/media/3.1f3c53f9d665b9096ad0.png",
+    "index.html": "./index.html",
+    "static/media/back.svg": "./static/media/back.d1b57575113f0971fe88292b6dea3821.svg",
+    "main.970fda4d.css.map": "./static/css/main.970fda4d.css.map",
+    "main.abd6ac2e.js.map": "./static/js/main.abd6ac2e.js.map",
+    "787.28cb0dcd.chunk.js.map": "./static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f3a727ae.css",
-    "static/js/main.64f250d5.js"
+    "static/css/main.970fda4d.css",
+    "static/js/main.abd6ac2e.js"
   ]
 }
