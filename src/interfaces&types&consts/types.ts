@@ -1,3 +1,5 @@
+export type Trainer = 'Carno' | 'Table';
+
 export type TrainerType = 'auto' | 'static';
 
 export type Operator = '⊕' | '∨' | '∧' | '~' | '←' | '/' | '→' | '↓';

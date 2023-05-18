@@ -4,8 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import styles from './App.module.scss';
 import { Context } from '../languageContext';
 import useLocalStorage from '../hooks/useLocalStorage';
-import Carno from '../components/Carno/Carno';
-import Table from '../components/Table/Table';
+import TruthTable from '../components/TruthTable/TruthTable';
 import SelectTrainerType from '../components/SelectTrainerType/SelectTrainerType';
 import Header from '../components/Header/Header';
 import Zhegalkin from '../components/Zhegalkin/Zhegalkin';
@@ -17,11 +16,11 @@ function App() {
       <Header></Header>
       <Routes>
         <Route index element={<Main />} />
-        <Route path="/carno/random" element={<Carno type="auto" />} />
-        <Route path="/carno/fromTeacher" element={<Carno type="static" />} />
+        <Route path="/carno/random" element={<TruthTable trainer="Carno" type="auto" />} />
+        <Route path="/carno/fromTeacher" element={<TruthTable trainer="Carno" type="static" />} />
         <Route path="/carno" element={<SelectTrainerType what={'карты Карно'} />} />
-        <Route path="/table/random" element={<Table type="auto" />} />
-        <Route path="/table/fromTeacher" element={<Table type="static" />} />
+        <Route path="/table/random" element={<TruthTable trainer="Table" type="auto" />} />
+        <Route path="/table/fromTeacher" element={<TruthTable trainer="Table" type="static" />} />
         <Route path="/table" element={<SelectTrainerType what={'таблицы'} />} />
         <Route path="/zhegalkin" element={<Zhegalkin />} />
       </Routes>

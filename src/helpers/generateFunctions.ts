@@ -1,4 +1,4 @@
-import { operators, CarnoValuesOrder } from '../interfaces&types&consts/consts';
+import { operators } from '../interfaces&types&consts/consts';
 import { XNode } from '../interfaces&types&consts/types';
 import { Node } from './tree';
 
@@ -146,11 +146,11 @@ export function PrintFunction(node: Node, f: Array<string | XNode>) {
   f.push(')');
 }
 
-export function CheckTreeAnswer(root: Node, a: number[], vars: number) {
+export function CheckTreeAnswer(root: Node, a: number[], vectors: string[]) {
   let count = 0;
   const progress = [];
   for (let i = 0; i < a.length; i++) {
-    const vector = CarnoValuesOrder[vars][i];
+    const vector = vectors[i];
     console.log(vector);
     const t = getValue(root, vector);
     console.log(t, a[i]);

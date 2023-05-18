@@ -1,42 +1,9 @@
 .container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
     gap: 5vh;
-    
-    .vars {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        font-weight: 700;
-        .title {
-            font-size: 20px;
-        }
-        .bar {
-            display: flex;
-            border: 4px solid #333333;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 10px;
-            .var {
-                color: #333333;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 48px;
-                height: 48px;
-                border-right: 3px solid #555555;
-                transition: background-color ease-in-out 0.25s;
-                &:hover, &.active {
-                    cursor: pointer;
-                    background-color: #8f8f8f;
-                }
-                &:last-child {
-                    border-right: 0;
-                }
-            }
-        }
-    }
     .functionImage {
         border: 4px solid #333333;
         border-radius: 14px;
@@ -50,11 +17,85 @@
         font-weight: 700;
         padding: 10px;
     }
-    .left_flex{
+    .bottom {
         display: flex;
-        align-items: center;
-        gap: 8vw;
-        .table_container{
+        justify-content: space-around;
+        width: 90vw;
+        max-width: 1200px;
+        .vars {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 13px;
+            font-weight: 700;
+            .title {
+                font-size: 20px;
+                max-width: 150px;
+                text-align: center;
+            }
+            .bar {
+                display: flex;
+                flex-direction: column;
+                border: 4px solid #333333;
+                border-radius: 10px;
+                font-size: 14px;
+                line-height: 10px;
+                .var {
+                    color: #333333;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 48px;
+                    height: 48px;
+                    transition: background-color ease-in-out 0.25s;
+                    &:hover, &.active {
+                        cursor: pointer;
+                        background-color: #8f8f8f;
+                    }
+                    &:last-child {
+                        border-right: 0;
+                    }
+                }
+            }
+        }
+        .TruthTable {
+            display: grid;
+            grid-template-areas: 'header header' 'block-1 block-2';
+            .table, .tableAnswers, .tableVars {
+                display: grid;
+                border: 1px solid #000;
+            }
+            .tableVars {
+                grid-area: header;
+            }
+            .table {
+                grid-area: block-1;
+            }
+            .tableAnswers {
+                grid-area: block-2;
+            }
+            .section{
+                background-color: #fff;
+                width:50px;
+                height:50px;
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.123);
+                    cursor: pointer;
+                }
+                .progress {
+                    width: 100%;
+                    height: 100%;
+                    transition: all 0.33s ease-out;
+                    &.correct {
+                        border: 25px solid lime;
+                    }
+                    &.incorrect {
+                        border: 25px solid red;
+                    }
+                }
+            }
+        }
+        .Carno {
             display: inline-block;
             .table_grid{
                 display: grid;
@@ -192,8 +233,8 @@
         .buttons {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
+            margin-top: 60px;
             .enter {
                 color: black;
                 padding: 10px 20px;
@@ -239,4 +280,5 @@
             }
         }
     }
+
 }
