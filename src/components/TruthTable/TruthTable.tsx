@@ -53,6 +53,8 @@ const TruthTable = ({ trainer, type }: IProps) => {
     const newTableFilling = [];
     for (let i = 0; i < Math.pow(2, n); i++) newTableFilling.push(0);
     setTableFilling(newTableFilling);
+    setResult(-1);
+    setProgress([]);
     if (type === 'auto') setTree(new Tree(operators[Math.floor(Math.random() * operators.length)]));
   }
 
@@ -293,10 +295,10 @@ const TruthTable = ({ trainer, type }: IProps) => {
           {trainer == 'Table' ? (
             <div className={styles.clicks}>
               <div className={styles.click}>
-                <img src={mouse_left} height={46} alt="" /> <span>- {t('0 value')}</span>
+                <img src={mouse_left} height={46} alt="" /> <span>- {t('1 value')}</span>
               </div>
               <div className={styles.click}>
-                <img src={mouse_right} height={46} alt="" /> <span>- {t('1 value')}</span>
+                <img src={mouse_right} height={46} alt="" /> <span>- {t('0 value')}</span>
               </div>
             </div>
           ) : (
