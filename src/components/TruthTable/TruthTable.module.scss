@@ -1,3 +1,33 @@
+@mixin _1000 {
+    @media (max-width: 1000px){
+        @content;
+    }
+}
+
+@mixin _860 {
+    @media (max-width: 860px){
+        @content;
+    }
+}
+
+@mixin _760 {
+    @media (max-width: 860px){
+        @content;
+    }
+}
+
+@mixin _530 {
+    @media (max-width: 530px){
+        @content;
+    }
+}
+
+@mixin _380 {
+    @media (max-width: 380px){
+        @content;
+    }
+}
+
 .container {
     display: flex;
     justify-content: center;
@@ -9,6 +39,9 @@
         display: flex;
         gap: 10px;
         align-items: center;
+        @include _1000 {
+            gap: 3px;
+        }
         .functionImage {
             border: 4px solid #333333;
             border-radius: 14px;
@@ -18,9 +51,15 @@
         .functionRandom {
             border: 2px solid #333333;
             border-radius: 9px;
-            font-size: 28px;
+            font-size: calc(10px + 18 * (100vw / 1280));
             font-weight: 700;
             padding: 10px;
+            @include _1000 {
+                padding: 7px;
+            }
+            @include _760 {
+                font-size: calc(10px + (18 + 18 * 0.7) * ((100vw - 320px) / 1280));
+            }
         }
         .reload {
             background: transparent;
@@ -49,6 +88,9 @@
                 border-radius: 10px;
                 font-size: 14px;
                 line-height: 10px;
+                @include _860 {
+                    flex-direction: row;
+                }
                 .var {
                     color: #333333;
                     display: flex;
@@ -66,12 +108,21 @@
                     }
                 }
             }
+            @include _860 {
+                flex-direction: row;
+            }
+            @include _380 {
+                flex-direction: column;
+            }
         }
         .TruthTable {
             display: grid;
             grid-template-areas: 'header header' 'block-1 block-2';
             max-height: calc(95vh - 221.2px);
             overflow-y: auto;
+            @include _860 {
+                margin-top: 20px;
+            }
             .table, .tableAnswers, .tableVars {
                 display: grid;
                 border: 1px solid #000;
@@ -108,9 +159,15 @@
         }
         .Karnaugh {
             display: inline-block;
+            &.five {
+                @include _530 {
+                    align-self: flex-start;
+                    overflow-x: auto;
+                }
+            }
             .table_grid{
                 display: grid;
-                grid-template: 100px / 100px 1fr;
+                grid-template: 100px / 50px 1fr;
                 grid-template-areas:  "header header" "aside main" "footer footer";
                 margin-bottom: 30px;
                 font-size: 22px;
@@ -257,6 +314,9 @@
                     align-items: center;
                     gap: 6px;
                 }
+                @include _860 {
+                    padding-top: 80px;
+                }
             }
             .enter {
                 color: black;
@@ -301,6 +361,14 @@
                     background-size: 100% 200%;
                 }
             }
+            @include _860 {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        }
+        @include _860 {
+            flex-direction: column;
+            align-items: center;
         }
     }
 

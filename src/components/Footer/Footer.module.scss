@@ -1,3 +1,9 @@
+@mixin _700 {
+    @media (max-width: 700px){
+        @content;
+    }
+}
+
 footer {
     display: flex;
     height: 90px;
@@ -6,6 +12,9 @@ footer {
     padding: 0 15.833vw;
     align-items: center;
     bottom: -80px;
+    @include _700 {
+        padding: 0 50px;
+    }
     .right {
         font-weight: 600;
         font-size: 15px;

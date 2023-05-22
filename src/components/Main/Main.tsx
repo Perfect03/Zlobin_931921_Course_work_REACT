@@ -20,17 +20,13 @@ const Main = () => {
         >
           <div className={styles.title}>{t('Choose trainer')}:</div>
           <div className={styles.trainers}>
-            <Link className={styles.trainer} to="karnaugh">
+            <Link className={styles.trainer} to="karnaugh/random">
               <div className={styles.title}>{t('Karnaugh map')}</div>
               <img src={Table} alt="Карта Карно" />
             </Link>
-            <Link className={styles.trainer} to="table">
+            <Link className={styles.trainer} to="table/random">
               <div className={styles.title}>{t('Truth table')}</div>
               <img src={Karnaugh} alt="Таблица истинности" />
-            </Link>
-            <Link className={styles.trainer} to="zhegalkin">
-              <div className={styles.title}>{t('Zhegalkin polynomial')}</div>
-              <img src={Zhegalkin} alt="Полином Жегалкина" />
             </Link>
           </div>
         </div>

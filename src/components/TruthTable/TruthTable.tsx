@@ -167,7 +167,7 @@ const TruthTable = ({ trainer, type }: IProps) => {
           </div>
         </div>
         {trainer == 'Karnaugh' ? (
-          <div className={styles.Karnaugh}>
+          <div className={`${styles.Karnaugh} ${vars == 5 ? styles.five : ''}`}>
             <div className={styles.table_grid}>
               <div className={styles.lines_top_left}></div>
               <div className={styles.lines_top_main}>

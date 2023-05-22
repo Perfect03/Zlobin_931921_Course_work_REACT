@@ -1,9 +1,18 @@
+@mixin _700 {
+    @media (max-width: 700px){
+        @content;
+    }
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 170px);
     background-color: 0x80000000;
+    @include _700 {
+        padding: 0 20px;
+    }
     .menu {
         display: flex;
         flex-direction: column;
@@ -41,7 +50,7 @@
             font-weight: 700;
             font-size: 25px;
         }
-}
+    }
 .animation_start {
     visibility: hidden;
     opacity: 0;

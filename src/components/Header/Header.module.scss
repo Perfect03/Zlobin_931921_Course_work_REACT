@@ -1,3 +1,15 @@
+@mixin _700 {
+    @media (max-width: 700px){
+        @content;
+    }
+}
+
+@mixin _400 {
+    @media (max-width: 400px){
+        @content;
+    }
+}
+
 header {
     display: flex;
     height: 80px;
@@ -7,6 +19,12 @@ header {
     top: -80px;
     align-items: center;
     transition: .35s cubic-bezier(0.645, 0.045, 0.355, 1);
+    @include _700 {
+        padding: 0 50px;
+    }
+    @include _400 {
+        padding: 0 20px;
+    }
     .left {
         display: flex;
         align-items: center;
@@ -19,6 +37,9 @@ header {
             transition: all cubic-bezier(0.215, 0.610, 0.355, 1) 0.2s;
             &:hover {
                 box-shadow: 0px 0px 0px 3px rgba(0,0,0,0.4);
+            }
+            @include _700 {
+                margin-right: 10px;
             }
         }
         .title {
