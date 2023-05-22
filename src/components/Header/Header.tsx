@@ -1,6 +1,6 @@
 import styles from './Header.module.scss';
 import back from '../../assets/back.svg';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import i18n from '../../i18n';
 import { Context, ContextType } from '../../languageContext';
 import { useContext, useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const { language, setLanguage } = useContext(Context) as ContextType;
+  const location = useLocation();
 
   const handleLenguageChange = (lang: string) => {
     if (lang === 'ru') {
@@ -23,12 +24,22 @@ const Header = () => {
   const { t } = useTranslation();
   return (
     <header>
-      <div className={styles.left}>
-        <div className={styles.back} onClick={() => navigate(-1)}>
-          <img src={back} width={32} height={32} alt="back" />
+      {location.pathname.slice(1) ? (
+        <div className={styles.left}>
+          <div className={styles.back} onClick={() => navigate(-1)}>
+            <img src={back} width={32} height={32} alt="back" />
+          </div>
+          <h1 className={styles.title}>
+            {t(
+              location.pathname.includes('karnaugh')
+                ? 'Karnaugh map building'
+                : 'Truth Table building'
+            )}
+          </h1>
         </div>
-        <h1 className={styles.title}>{t('Karnaugh map building')}</h1>
-      </div>
+      ) : (
+        ''
+      )}
       <div className={styles.langs}>
         <span
           className={`${styles.lang} ${language === 'ru' ? styles.active : ''}`}

@@ -4,18 +4,27 @@
     align-items: center;
     flex-direction: column;
     gap: 5vh;
-    .functionImage {
-        border: 4px solid #333333;
-        border-radius: 14px;
-        max-width: 90vw;
-        height: 70px;
-    }
-    .functionRandom {
-        border: 2px solid #333333;
-        border-radius: 9px;
-        font-size: 28px;
-        font-weight: 700;
-        padding: 10px;
+    min-height: calc(100vh - 170px);
+    .top {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        .functionImage {
+            border: 4px solid #333333;
+            border-radius: 14px;
+            max-width: 90vw;
+            height: 70px;
+        }
+        .functionRandom {
+            border: 2px solid #333333;
+            border-radius: 9px;
+            font-size: 28px;
+            font-weight: 700;
+            padding: 10px;
+        }
+        .reload {
+            background: transparent;
+        }
     }
     .bottom {
         display: flex;
@@ -61,6 +70,8 @@
         .TruthTable {
             display: grid;
             grid-template-areas: 'header header' 'block-1 block-2';
+            max-height: calc(95vh - 221.2px);
+            overflow-y: auto;
             .table, .tableAnswers, .tableVars {
                 display: grid;
                 border: 1px solid #000;
@@ -95,7 +106,7 @@
                 }
             }
         }
-        .Carno {
+        .Karnaugh {
             display: inline-block;
             .table_grid{
                 display: grid;
@@ -235,6 +246,18 @@
             flex-direction: column;
             align-items: center;
             margin-top: 60px;
+            .clicks {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                margin-top: -50px;
+                margin-bottom: 20px;
+                .click {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+            }
             .enter {
                 color: black;
                 padding: 10px 20px;

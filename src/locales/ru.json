@@ -10,5 +10,9 @@
   "Choose trainer": "Выберите тренажёр",
   "Karnaugh map": "Карта Карно",
   "Truth table": "Таблица истинности",
-  "Zhegalkin polynomial": "Полином Жегалкина"
+  "Zhegalkin polynomial": "Полином Жегалкина",
+  "Truth Table building": "Построение таблицы истинности",
+  "0 value": "значение 0",
+  "1 value": "значение 1",
+  "Change function": "Сменить функцию"
 }

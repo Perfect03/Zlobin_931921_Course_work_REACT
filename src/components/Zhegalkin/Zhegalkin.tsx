@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import getRandomArbitrary from '../../helpers/getRandomArbitrary';
 import { X, operators, answers } from '../../interfaces&types&consts/consts';
+import { generateDNF } from '../../helpers/generateFunctions';
 
 interface IProps {
   type: TrainerType;
@@ -19,6 +20,7 @@ const Zhegalkin = () => {
   for (let i = 0; i < Math.pow(2, vars); i++) tableFillingInit.push('');
   const [tableFilling, setTableFilling] = useState(tableFillingInit);
 
+  console.log(generateDNF(vars));
   const { t } = useTranslation();
   function changeVars(n: number) {
     setVars(n);

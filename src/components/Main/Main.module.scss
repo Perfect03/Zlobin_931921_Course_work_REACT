@@ -1,45 +1,45 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 80px);
-    .menu {
+    .container {
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 20px;
-        font-weight: 700;
-        font-size: 25px;
-        transition: opacity .6s, visibility .5s,transform .3s ease;
-    .trainers {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        .trainer {
-            border: solid 8px black;
-            border-radius: 18px;
-            padding: 15px;
+        min-height: calc(100vh - 170px);
+        .menu {
             display: flex;
             flex-direction: column;
-            .title {
-                text-align: center;
-                font-size: 22px;
-                max-width: 175px;
-            }
-            img {
-                max-width: 175px;
+            align-items: center;
+            gap: 20px;
+            font-weight: 700;
+            font-size: 25px;
+            transition: opacity .6s, visibility .5s,transform .3s ease;
+        .trainers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            .trainer {
+                border: solid 8px black;
+                border-radius: 18px;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                .title {
+                    text-align: center;
+                    font-size: 22px;
+                    max-width: 175px;
+                }
+                img {
+                    max-width: 175px;
+                }
             }
         }
     }
-}
-.animation_start {
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-20%);
-}
-.animation_end {
-    visibility: visible;
-    opacity:1;
-    transform: translateY(0);
-}
-}
+    .animation_start {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-20%);
+    }
+    .animation_end {
+        visibility: visible;
+        opacity:1;
+        transform: translateY(0);
+    }
+    }

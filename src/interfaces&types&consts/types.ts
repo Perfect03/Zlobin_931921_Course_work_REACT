@@ -1,4 +1,4 @@
-export type Trainer = 'Carno' | 'Table';
+export type Trainer = 'Karnaugh' | 'Table';
 
 export type TrainerType = 'auto' | 'static';
 

@@ -10,5 +10,9 @@
   "Choose trainer": "Choose trainer",
   "Karnaugh map": "Karnaugh map",
   "Truth table": "Truth table",
-  "Zhegalkin polynomial": "Zhegalkin polynomial"
+  "Zhegalkin polynomial": "Zhegalkin polynomial",
+  "Truth Table building": "Truth Table building",
+  "0 value": "0 value",
+  "1 value": "1 value",
+  "Change function": "Change function"
 }

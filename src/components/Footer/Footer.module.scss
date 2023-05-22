@@ -1,0 +1,21 @@
+footer {
+    display: flex;
+    height: 90px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15.833vw;
+    align-items: center;
+    bottom: -80px;
+    .right {
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        a {
+            padding: 5px;
+        }
+    }
+}

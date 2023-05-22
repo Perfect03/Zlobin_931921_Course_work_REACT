@@ -8,6 +8,7 @@ import TruthTable from '../components/TruthTable/TruthTable';
 import SelectTrainerType from '../components/SelectTrainerType/SelectTrainerType';
 import Header from '../components/Header/Header';
 import Zhegalkin from '../components/Zhegalkin/Zhegalkin';
+import Footer from '../components/Footer/Footer';
 
 function App() {
   const [language, setLanguage] = useLocalStorage('language', 'ru');
@@ -16,14 +17,18 @@ function App() {
       <Header></Header>
       <Routes>
         <Route index element={<Main />} />
-        <Route path="/carno/random" element={<TruthTable trainer="Carno" type="auto" />} />
-        <Route path="/carno/fromTeacher" element={<TruthTable trainer="Carno" type="static" />} />
-        <Route path="/carno" element={<SelectTrainerType what={'карты Карно'} />} />
+        <Route path="/karnaugh/random" element={<TruthTable trainer="Karnaugh" type="auto" />} />
+        <Route
+          path="/karnaugh/fromTeacher"
+          element={<TruthTable trainer="Karnaugh" type="static" />}
+        />
+        <Route path="/karnaugh" element={<SelectTrainerType />} />
         <Route path="/table/random" element={<TruthTable trainer="Table" type="auto" />} />
         <Route path="/table/fromTeacher" element={<TruthTable trainer="Table" type="static" />} />
-        <Route path="/table" element={<SelectTrainerType what={'таблицы'} />} />
+        <Route path="/table" element={<SelectTrainerType />} />
         <Route path="/zhegalkin" element={<Zhegalkin />} />
       </Routes>
+      <Footer></Footer>
     </Context.Provider>
   );
 }

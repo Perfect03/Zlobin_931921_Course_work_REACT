@@ -32,7 +32,7 @@ export const answers = {
   fn5__6: '01100000011111000110000001100000',
 };
 
-export const CarnoValuesOrder = [
+export const KarnaughValuesOrder = [
   ['0'],
   ['0', '1'],
   ['00', '10', '01', '11'],

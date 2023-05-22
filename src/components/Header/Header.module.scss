@@ -33,6 +33,7 @@ header {
         line-height: 18px;
         border: 3px solid black;
         padding: 4px 0;
+        margin-left: auto;
         .lang {
             color: black;
             cursor: pointer;
@@ -48,8 +49,4 @@ header {
             }
         }
     }
-}
-
-.toastify {
-    top: 77px;
 }

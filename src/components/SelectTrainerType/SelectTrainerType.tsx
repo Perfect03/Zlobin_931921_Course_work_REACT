@@ -6,15 +6,10 @@ import Table from '../../assets/Table.png';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface IProps {
-  what: string;
-}
-
-const SelectTrainerType = ({ what }: IProps) => {
+const SelectTrainerType = () => {
   const [animation, setAnimation] = useState(false);
   const { t } = useTranslation();
   useEffect(() => {
-    console.log(what);
     setAnimation(true);
   }, []);
   return (
@@ -37,11 +32,6 @@ const SelectTrainerType = ({ what }: IProps) => {
         </ol>
       </div>
     </div>
-    /*<Context.Provider value={{ persons: data }}>
-      <BrowserRouter>
-        
-      </BrowserRouter>
-    </Context.Provider>*/
   );
 };
 

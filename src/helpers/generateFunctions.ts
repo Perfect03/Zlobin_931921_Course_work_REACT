@@ -88,9 +88,6 @@ function Operators(a) {
 }
 */
 export function generateWithTree(node: Node, depth: number, vars: number) {
-  //tree.add('VP of Happiness', 'CEO', tree.traverseDF);
-
-  //if(operators.includes(node.data)) {
   if (Math.random() < 1 / Math.pow(2, depth)) {
     const newLeft = new Node(operators[Math.floor(Math.random() * operators.length)]);
     node.left = newLeft;
@@ -151,14 +148,11 @@ export function CheckTreeAnswer(root: Node, a: number[], vectors: string[]) {
   const progress = [];
   for (let i = 0; i < a.length; i++) {
     const vector = vectors[i];
-    console.log(vector);
     const t = getValue(root, vector);
-    console.log(t, a[i]);
     if (t == a[i]) {
       count++;
       progress[i] = 1;
     } else progress[i] = 0;
-    console.log(count);
   }
   return {
     count: count,
@@ -168,23 +162,19 @@ export function CheckTreeAnswer(root: Node, a: number[], vectors: string[]) {
 
 function getValue(node: Node, vector: string) {
   let left, right;
-  console.log(node);
   if (node.left && Array.isArray(node.left.data)) {
     left = 1;
     node.left.data.forEach((el) => {
-      console.log(Number(el.bool), Number(vector[el.index - 1]));
       if (Number(el.bool) != Number(vector[el.index - 1])) left = 0;
     });
   } else left = getValue(node.left as Node, vector);
   if (node.right && Array.isArray(node.right.data)) {
     right = 1;
     node.right.data.forEach((el) => {
-      console.log(Number(el.bool), Number(vector[el.index - 1]));
       if (Number(el.bool) != Number(vector[el.index - 1])) right = 0;
     });
   } else right = getValue(node.right as Node, vector);
   let answ = 0;
-  console.log(left, right);
   switch (node.data) {
     case '⊕':
       answ = left ^ right;
@@ -211,6 +201,49 @@ function getValue(node: Node, vector: string) {
       answ = Number(!left && !right);
       break;
   }
-  console.log(answ);
   return answ;
+}
+
+export function generateDNF(vars: number) {
+  const conunctions = [];
+  const r = Math.random();
+  for (let count = 1; count / 10 < r; count++) {
+    conunctions.push(formConunction(Math.floor(Math.random() * (vars - 1)) + 1, vars));
+  }
+
+  const newConnunctions = [];
+  for (let i = 0; i < conunctions.length; i += 2) {
+    const brackets = [conunctions[i]];
+    if (i < conunctions.length - 1) brackets.push(conunctions[i + 1]);
+    newConnunctions.push(brackets);
+  }
+  console.log(newConnunctions);
+
+  const Zheg = [];
+  newConnunctions.forEach((el, index) => {
+    if (el[1]) {
+      let ortog = false;
+      el[0].forEach((el1) => {
+        if (el[1])
+          el[1].forEach((el2) => {
+            if (el1.index == el2.index && el1.bool != el2.bool) ortog = true;
+          });
+      });
+      const brackets = [el[0]];
+      if (el[1]) brackets.push(el[1]);
+      if (!ortog) {
+        const elem = [...el[0]];
+        if (el[1]) elem.push(...el[1]);
+        brackets.push(elem.filter((x, i) => elem.findIndex((el) => el.index == x.index) == i));
+      }
+      newConnunctions[index] = brackets;
+    }
+  });
+  console.log(newConnunctions);
+
+  for (let i = 0; i < newConnunctions.length - 1; i++) {
+    const brackets = [];
+    brackets.push(...newConnunctions[i], ...newConnunctions[i + 1]);
+    const merge = [];
+  }
 }

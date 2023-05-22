@@ -13,6 +13,7 @@ export class Node {
     this.right = null;
   }
 }
+
 export class Tree {
   _root: Node;
   constructor(data: Operator | Array<XNode>) {
