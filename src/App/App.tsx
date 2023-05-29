@@ -26,7 +26,9 @@ function App() {
         <Route path="/table/random" element={<TruthTable trainer="Table" type="auto" />} />
         <Route path="/table/fromTeacher" element={<TruthTable trainer="Table" type="static" />} />
         <Route path="/table" element={<SelectTrainerType />} />
-        <Route path="/zhegalkin" element={<Zhegalkin />} />
+        <Route path="/zhegalkin" element={<SelectTrainerType />} />
+        <Route path="/zhegalkin/random" element={<Zhegalkin type="auto" />} />
+        <Route path="/zhegalkin/fromTeacher" element={<Zhegalkin type="static" />} />
       </Routes>
       <Footer></Footer>
     </Context.Provider>

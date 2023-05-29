@@ -2,91 +2,6 @@ import { operators } from '../interfaces&types&consts/consts';
 import { XNode } from '../interfaces&types&consts/types';
 import { Node } from './tree';
 
-/*export function Generate(v, vars) {
-  const probabilities = [];
-  for (let i = 0, p = 1 / 2; i < vars; i++, p /= 2) {
-    probabilities.push(p);
-  }
-  probabilities[vars - 1] *= 2;
-  generateVar(0, v, vars);
-  Fill(v, vars, probabilities);
-  return v;
-}
-
-export function Fill(a, vars, probabilities) {
-  console.log(a);
-  fillArray(a, vars);
-  Operators(a);
-  return a;
-}
-
-function generateVar(depth, v, vars) {
-  let r = Math.random();
-  console.log(r);
-  if (r < 1 / Math.pow(2, depth)) {
-    console.log(depth);
-    const temp = [];
-    const temp2 = [];
-    generateVar(depth + 1, temp, vars);
-    generateVar(depth + 1, temp2, vars);
-    v.push(temp);
-    v.push(temp2);
-  } else {
-    r = Math.random();
-    for (let i = 0; i / vars <= r; i++) {
-      v.push([]);
-    }
-  }
-  // let p = probabilities[0];
-  // while (r>p) {
-  // count++;
-  // p+=probabilities[count - (depth ? 0 : 2)];
-  // }
-  // for (let i=0; i<count; i++) {f
-  // const expr = [];
-  // generateVar(depth+1, expr, vars);
-  // v.push(expr);
-  // }
-}
-
-function fillArray(a, vars) {
-  console.log(a.length);
-  a.forEach((el, index) => {
-    if (el.every((elem) => !elem.length)) {
-      a[index] = formConunction(el.length, vars);
-    }
-    // else el.forEach(elem => {
-    //   fillArray(elem, vars);
-    // });
-    else fillArray(el, vars);
-  });
-  // if(a.every(el => !el.length)) {console.log(a);
-  //   return formConunction(a.length, vars);
-  //console.log(a);
-  // const r = Math.random();
-  // let p = 0;
-  // for (let i=0; i<probabilities.length; i++) {
-  //   p+=probabilities[i];
-  //   if (r<p) {
-  //     a=formConunction(i+1, vars);
-  //     console.log(a);
-  //     //console.log(i+1);
-  //     break;
-  //   }
-  // }
-  // }
-  //     else a.forEach(el => {
-  //     a = fillArray(el, vars);
-  //   });
-  // console.log(a);
-}
-
-function Operators(a) {
-  a.forEach((el, index) => {
-    //if(el.isArray() )
-  });
-}
-*/
 export function generateWithTree(node: Node, depth: number, vars: number) {
   if (Math.random() < 1 / Math.pow(2, depth)) {
     const newLeft = new Node(operators[Math.floor(Math.random() * operators.length)]);
@@ -205,28 +120,33 @@ function getValue(node: Node, vector: string) {
 }
 
 export function generateDNF(vars: number) {
-  const conunctions = [];
+  const connunctions = [];
   const r = Math.random();
-  for (let count = 1; count / 10 < r; count++) {
-    conunctions.push(formConunction(Math.floor(Math.random() * (vars - 1)) + 1, vars));
+  for (let count = 0; count / 10 < r; count += 2) {
+    connunctions.push(formConunction(Math.floor(Math.random() * (vars - 1)) + 1, vars));
   }
+  return connunctions;
+}
 
-  const newConnunctions = [];
-  for (let i = 0; i < conunctions.length; i += 2) {
-    const brackets = [conunctions[i]];
-    if (i < conunctions.length - 1) brackets.push(conunctions[i + 1]);
-    newConnunctions.push(brackets);
-  }
-  console.log(newConnunctions);
+export function ZhegalkinBuild(connunctions: XNode[][]) {
+  let newConnunctions: (XNode | 1 | XNode[])[][][] = [];
+  let i = 0;
+  for (i = 0; i < connunctions.length - 1; i += 2)
+    newConnunctions.push([connunctions[i], connunctions[i + 1]]);
+  if (i == connunctions.length - 1) newConnunctions.push([connunctions[i]]);
+  console.log(newConnunctions.slice());
 
-  const Zheg = [];
   newConnunctions.forEach((el, index) => {
     if (el[1]) {
       let ortog = false;
       el[0].forEach((el1) => {
         if (el[1])
           el[1].forEach((el2) => {
-            if (el1.index == el2.index && el1.bool != el2.bool) ortog = true;
+            if (
+              (el1 as XNode).index == (el2 as XNode).index &&
+              (el1 as XNode).bool != (el2 as XNode).bool
+            )
+              ortog = true;
           });
       });
       const brackets = [el[0]];
@@ -234,16 +154,111 @@ export function generateDNF(vars: number) {
       if (!ortog) {
         const elem = [...el[0]];
         if (el[1]) elem.push(...el[1]);
-        brackets.push(elem.filter((x, i) => elem.findIndex((el) => el.index == x.index) == i));
+        brackets.push(
+          elem
+            .filter(
+              (x, i) => elem.findIndex((el) => (el as XNode).index == (x as XNode).index) == i
+            )
+            .sort((a, b) => (a as XNode).index - (b as XNode).index)
+        );
       }
       newConnunctions[index] = brackets;
     }
   });
-  console.log(newConnunctions);
+  console.log(newConnunctions.slice());
 
-  for (let i = 0; i < newConnunctions.length - 1; i++) {
-    const brackets = [];
-    brackets.push(...newConnunctions[i], ...newConnunctions[i + 1]);
-    const merge = [];
+  while (newConnunctions.length > 1) {
+    const newNewConnunctions = [];
+    for (let i = 0; i < newConnunctions.length - 1; i += 2) {
+      const brackets = [];
+      brackets.push(...newConnunctions[i], ...newConnunctions[i + 1]);
+      newConnunctions[i].forEach((arr1) => {
+        (newConnunctions as XNode[][][])[i + 1].forEach((arr2) => {
+          let ortog = false;
+          arr1.forEach((el1) => {
+            arr2.forEach((el2) => {
+              if ((el1 as XNode).index == el2.index && (el1 as XNode).bool != el2.bool)
+                ortog = true;
+            });
+          });
+          if (!ortog) {
+            const newBrackets = [...arr1, ...arr2];
+            brackets.push(
+              [...arr1, ...arr2]
+                .filter(
+                  (el, index) =>
+                    newBrackets.findIndex((elem) => (el as XNode).index == (elem as XNode).index) ==
+                    index
+                )
+                .sort((a, b) => (a as XNode).index - (b as XNode).index)
+            );
+          }
+        });
+      });
+      newNewConnunctions.push(brackets);
+    }
+    newConnunctions = newNewConnunctions;
   }
+  console.log(newConnunctions.slice());
+
+  const newNewNewConnunctions: (XNode | 1 | XNode[])[][] = [];
+  newConnunctions[0].forEach((el, index) => {
+    newNewNewConnunctions.push(...deleteInverse(el, []));
+  });
+  let answ: (XNode | 1 | XNode[])[] = [];
+  newNewNewConnunctions.forEach((el) => {
+    answ.push(...el);
+  });
+  console.log(answ.slice());
+  answ = answ.filter(
+    (el, index) =>
+      answ.findIndex((elem) => JSON.stringify(el) == JSON.stringify(elem)) == index || el == 1
+  );
+  answ.map((el, index) => {
+    if ((el as XNode).index) answ[index] = [el as XNode];
+  });
+  const ones = answ.filter((el) => el == 1);
+  if (ones.length > 1) {
+    answ = answ.filter((el) => el != 1);
+    if (ones.length % 2) answ.push(1);
+  }
+  return answ;
+}
+
+function deleteInverse(a: (XNode | 1 | XNode[])[], c: (XNode | 1 | XNode[])[][]) {
+  const b = a;
+  a.forEach((el, index) => {
+    c.push((el as XNode).bool ? [el] : [1, { index: (el as XNode).index, bool: true }]);
+  });
+  console.log(c.slice());
+  return openBrackets(c);
+}
+
+function openBrackets(a: (XNode | 1 | XNode[])[][]) {
+  while (a.length > 1) {
+    const newBrackets: (1 | XNode | XNode[])[] = [];
+    console.log(a[0]);
+    console.log(a[1]);
+    a[0].forEach((el1) => {
+      a[1].forEach((el2) => {
+        if (el1 == 1) {
+          if (el2 == 1) newBrackets.push(1);
+          else newBrackets.push(el2);
+        } else if (el2 == 1) newBrackets.push(el1);
+        else {
+          const n = [];
+          if (Array.isArray(el1)) n.push(...el1);
+          else n.push(el1);
+          if (Array.isArray(el2)) n.push(...el2);
+          else n.push(el2);
+          newBrackets.push(n);
+        }
+      });
+    });
+    console.log(newBrackets);
+    a[0] = newBrackets;
+    console.log(a[0]);
+    a.splice(1, 1);
+  }
+  return a;
 }

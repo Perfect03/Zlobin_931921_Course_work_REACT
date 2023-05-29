@@ -33,6 +33,8 @@ const Header = () => {
             {t(
               location.pathname.includes('karnaugh')
                 ? 'Karnaugh map building'
+                : location.pathname.includes('zhegalkin')
+                ? 'Zhegalkin polynomial'
                 : 'Truth Table building'
             )}
           </h1>

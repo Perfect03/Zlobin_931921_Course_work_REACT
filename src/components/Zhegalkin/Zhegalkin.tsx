@@ -1,80 +1,188 @@
 import { useTranslation } from 'react-i18next';
-import { TrainerType } from '../../interfaces&types&consts/types';
+import { TrainerType, XNode } from '../../interfaces&types&consts/types';
+import reload from '../../assets/reload.png';
 import styles from './Zhegalkin.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import getRandomArbitrary from '../../helpers/getRandomArbitrary';
-import { X, operators, answers } from '../../interfaces&types&consts/consts';
-import { generateDNF } from '../../helpers/generateFunctions';
+import { X } from '../../interfaces&types&consts/consts';
+import { generateDNF, ZhegalkinBuild } from '../../helpers/generateFunctions';
 
 interface IProps {
   type: TrainerType;
 }
 
-const Zhegalkin = () => {
-  const [vars, setVars] = useState(Number(localStorage.getItem('varsCount')) || 2);
-  const [fn, setFn] = useState(getRandomArbitrary(1, 6));
-  const [result, setResult] = useState(-1);
-  const [progress, setProgress] = useState([] as number[]);
-  const tableFillingInit = [];
-  for (let i = 0; i < Math.pow(2, vars); i++) tableFillingInit.push('');
-  const [tableFilling, setTableFilling] = useState(tableFillingInit);
+interface IProgress {
+  connunction: XNode | XNode[];
+  answer: number[];
+}
 
-  console.log(generateDNF(vars));
+const Zhegalkin = ({ type }: IProps) => {
+  const [vars, setVars] = useState(Number(localStorage.getItem('varsCount')) || 2);
+  const [fn, setFn] = useState(type === 'static' ? getRandomArbitrary(1, 6) : ([] as XNode[][]));
+  const [answer, setAnswer] = useState([] as (1 | XNode[])[]);
+  const [result, setResult] = useState(-1);
+  const [example, setExample] = useState(0);
+  const [progress, setProgress] = useState([] as (IProgress | number)[]);
+
   const { t } = useTranslation();
   function changeVars(n: number) {
     setVars(n);
     localStorage.setItem('varsCount', `${n}`);
-    const newTableFilling = [];
-    for (let i = 0; i < Math.pow(2, n); i++) newTableFilling.push('');
-    setTableFilling(newTableFilling);
+    reLoad();
   }
 
-  const bools = Array(vars);
-  const booleanVectors: [number[]] = [[]];
-
-  function generateBooleanVectors(i: number) {
-    for (let k = 0; k < 2; k++) {
-      bools[i] = k;
-      i == vars - 1 ? booleanVectors.push([...bools]) : generateBooleanVectors(i + 1);
-    }
-    return booleanVectors;
-  }
+  useEffect(() => {
+    setVars(Number(localStorage.getItem('varsCount')) || 2);
+    console.log(vars);
+    reLoad();
+  }, []);
 
   function checkAnswer() {
     if (result >= 0) {
-      const newTableFilling = [];
-      for (let i = 0; i < tableFilling.length; i++) {
-        newTableFilling[i] = '';
+      reLoad();
+    } else {
+      let count = 0;
+      let n = answer.length;
+      let answ = answer;
+      const boolNumber = answ.find((el) => typeof el == 'number');
+      if (boolNumber) {
+        if (progress.includes(1)) count++;
+        answ = answ.filter((el) => typeof el != 'number');
+      } else if (!progress.includes(1)) count++;
+      else n++;
+      console.log(count, answ);
+      answ.forEach((el) => {
+        const i = progress
+          .filter((el) => typeof el != 'number')
+          .findIndex(
+            (elem) =>
+              JSON.stringify((elem as IProgress).answer.sort((a, b) => a - b)) ==
+              JSON.stringify((el as XNode[]).map((elem) => elem.index))
+          );
+        if (i >= 0) {
+          count++;
+          progress.splice(i, 1);
+        }
+      });
+      setResult(Math.floor((count / answer.length) * 100));
+    }
+  }
+
+  function inputAnswer(value: string, connunction: XNode | XNode[], index: number) {
+    console.log(value);
+
+    if (Number(value) >= 0 && Number(value) <= vars) {
+      const newProgress = progress;
+      console.log(newProgress);
+      const connIndex = progress.findIndex((el) => (el as IProgress).connunction == connunction);
+      if (connIndex >= 0) {
+        if (value.length) (newProgress[connIndex] as IProgress).answer[index] = Number(value);
+        else (newProgress[connIndex] as IProgress).answer[index] = -1;
+      } else {
+        const answer = [];
+        if (value.length) answer[index] = Number(value);
+        else answer[index] = -1;
+        newProgress.push({ connunction: connunction, answer: answer });
       }
-      setTableFilling(newTableFilling);
-      setResult(-1);
+      setProgress(newProgress);
+      console.log(newProgress);
+    }
+  }
+
+  function inputBoolNumber(value: string) {
+    if (Number(value) == 0 || Number(value) == 1) {
+      const newProgress = progress;
+      console.log(newProgress);
+      const ind = progress.findIndex((el) => typeof el == 'number');
+      if (ind < 0) newProgress.push(Number(value));
+      else {
+        if (value.length) newProgress[ind] = Number(value);
+        else newProgress[ind] = 0;
+      }
+      console.log(newProgress);
+    }
+  }
+
+  function reLoad() {
+    setResult(-1);
+    setExample(example + 1);
+    if (type === 'auto') {
+      const fn = generateDNF(vars);
+      setFn(fn);
+      console.log(fn);
+      const answ = ZhegalkinBuild(fn as XNode[][]) as (1 | XNode[])[];
+      setAnswer(answ);
       setProgress([]);
+      console.log(answ);
+    } else {
       let newFn = getRandomArbitrary(1, 6);
       while (fn == newFn) newFn = getRandomArbitrary(1, 6);
       setFn(newFn);
-    } else {
-      const answKey = Object.keys(answers).findIndex((el) => el == `fn${vars}__${fn}`);
-      const answValue = Object.values(answers)[answKey];
-      let count = 0;
-      const progress = [];
-      for (let i = 0; i < answValue.length; i++)
-        if (answValue[i] == tableFilling[i]) {
-          count++;
-          progress[i] = 1;
-        } else progress[i] = 0;
-      setResult(Math.floor((count / answValue.length) * 100));
-      setProgress(progress);
     }
   }
 
   return (
     <div className={styles.container}>
-      <img
-        className={styles.function}
-        src={require(`../../assets/functions/${vars}/${fn}.png`)}
-        alt=""
-      />
+      <div className={styles.top}>
+        {type === 'auto' ? (
+          <div className={styles.functionRandom}>
+            {(fn as XNode[][]).map((elem, index) => (
+              <>
+                {index ? <> ∨ </> : ''}
+                <div key={index} className={styles.connunction}>
+                  {elem.map((el, index) => (
+                    <span key={index} style={{ textDecoration: `${el.bool ? '' : 'overline'}` }}>
+                      {X[el.index - 1]}
+                    </span>
+                  ))}{' '}
+                </div>
+              </>
+            ))}
+          </div>
+        ) : (
+          <img
+            className={styles.functionImage}
+            src={require(`../../assets/functions/${vars}/${fn}.png`)}
+            alt=""
+          />
+        )}
+        <button
+          className={styles.reload}
+          title={t('Change function') as string}
+          onClick={() => reLoad()}
+        >
+          <img src={reload} height={35} alt="" />
+        </button>
+      </div>
+      <div className={styles.answer} key={example}>
+        {answer
+          .filter((el) => typeof el != 'number')
+          .map((el, index) => (
+            <div key={index} className={styles.connunction}>
+              {(el as XNode[]).map((elem, ind) => (
+                <div key={ind} className={styles.var}>
+                  X
+                  <input
+                    type="text"
+                    maxLength={1}
+                    onChange={(e) =>
+                      inputAnswer((e?.target as HTMLInputElement).value, el as XNode[], ind)
+                    }
+                  />
+                </div>
+              ))}
+              <div className={styles.xor}>⊕</div>
+            </div>
+          ))}
+        <div className={styles.number}>
+          <input
+            type="text"
+            maxLength={1}
+            onChange={(e) => inputBoolNumber((e?.target as HTMLInputElement).value)}
+          />
+        </div>
+      </div>
       <div className={styles.bottom}>
         <div className={styles.vars}>
           <div className={styles.title}>{t('Number of variables')}</div>
@@ -105,60 +213,6 @@ const Zhegalkin = () => {
             </div>
           </div>
         </div>
-        <div className={styles.table__container} style={{ gridTemplateColumns: `${vars}fr 1fr` }}>
-          <div
-            className={styles.tableVars}
-            style={{ gridTemplateColumns: `repeat(${vars + 1}, 1fr)` }}
-          >
-            {[...Array(vars)].map((el, index) => (
-              <div key={index} className={styles.section}>
-                {X[index]}
-              </div>
-            ))}
-            <div className={styles.section}>f(x)</div>
-          </div>
-          <div
-            className={styles.table}
-            style={{
-              gridTemplateColumns: `repeat(${vars}, 1fr`,
-            }}
-          >
-            {generateBooleanVectors(0).map((el, index) =>
-              el.map((elem, index) => (
-                <div key={index} className={styles.section}>
-                  {elem}
-                </div>
-              ))
-            )}
-          </div>
-          <div className={styles.tableAnswers} style={{ gridTemplateColumns: '1fr' }}>
-            {tableFilling.map((el, index) => (
-              <div
-                key={index}
-                className={styles.section}
-                onClick={() => {
-                  const newTable = tableFilling;
-                  newTable[index] = '1';
-                  setTableFilling([...newTable]);
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  const newTable = tableFilling;
-                  newTable[index] = '0';
-                  setTableFilling([...newTable]);
-                }}
-              >
-                <div
-                  className={`${styles.progress} ${
-                    result >= 0 ? (progress[index] ? styles.correct : styles.incorrect) : ''
-                  }`}
-                >
-                  {el}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
         <div className={styles.buttons}>
           <button className={styles.enter} onClick={() => checkAnswer()}>
             {t(result >= 0 ? 'Next' : 'Done')}
@@ -169,11 +223,6 @@ const Zhegalkin = () => {
         </div>
       </div>
     </div>
-    /*<Context.Provider value={{ persons: data }}>
-      <BrowserRouter>
-        
-      </BrowserRouter>
-    </Context.Provider>*/
   );
 };
 
